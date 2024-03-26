@@ -1,0 +1,9 @@
+Projet name: Event Management System
+Author: Aditya Chaudhary (MERN stack developer)
+Projet description: This application helps a user to find list of events in its area in next 14 days based on user's location.
+
+
+♦ Tech-stack used:
+
+• Node.js : js runtime environment
+• ExpressJs :  Node.js web application framework 
