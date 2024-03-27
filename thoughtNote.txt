@@ -20,9 +20,26 @@ _________________________________
 • thunder client     // A vs code extension to test REST APIs
 • VS code            // A sourse-code editor   
  
-•• Some important design decisions
+•• Some challenges faced and important design decisions
 
-• 
+• Ingestion of csv data into a database: 
+Using "csvtojson" node.js module simplified the process of reading csv data, converting it to json data
+ and later ingesting it into the database using js "Array.map()" method.
+
+• Resolution of promices of external API calls: 
+  Wrapping all the promices inside "Promice.all()" method solves the problem of unresolved promices.
+  It took me a couple of days to find about this method. 
+
+• Unwanted properties wrapped inside Mongoose document as a query response:
+  When we try to merge or manipulate mongoose docs as if they were plain objects (for example, 
+  using the spread operator ...), we encounter unexpected results. 
+  This is because Mongoose docs wrap the actual data in additional layers to handle ORM functionality, 
+  like tracking changes and lazy loading. This could be resolved by using ".toObject()" method provided
+  by Mongoose.
+
+  
+
+
 
 -----------------------------------------------------------------------------------------------
 
