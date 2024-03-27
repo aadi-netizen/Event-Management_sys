@@ -19,7 +19,7 @@ _________________________________
 • dotenv             // A Node module used to separate secret environment variables from main project file
 • thunder client     // A vs code extension to test REST APIs
 • VS code            // A sourse-code editor   
-
+ 
 •• Some important design decisions
 
 • 
@@ -51,20 +51,16 @@ List of endpoints
    request-url: http://localhost:4000/events/find
    request-body example: {"latitude": "40.7128","longitude": " -74.0060","date": "2024-03-15","page": 2}
    response: An array of event data as below
-   [  {  "$isNew": false,
-    "_doc": {
-      "location": {
-        "longitude": 7.879804885333471,
-        "latitude": -37.994396085761935
-      },
-      "_id": "6601a848ba0622dd888588ce",
-      "evt_name": "May",
-      "city": "New Brittany",
-      "date": "2024-03-19T00:00:00.000Z",
-      "time": "10:30:00",
-      "__v": 0
-    },
-    "weather": "Sunny, 18C"
+   [  {
+    "location": {"longitude": 120.05259971186145, "latitude": 8.248454787971795},
+    "_id": "6601a848ba0622dd888588d8",
+    "evt_name": "Try fast suddenly",
+    "city": "Elizabethberg",
+    "date": "2024-03-29T00:00:00.000Z",
+    "time": "7:30:00",
+    "__v": 0,
+    "weather": "Rainy 13C",
+    "distance": "14383.43229714746"
   }, {}, {}...]
 
   ----------------------------------------------------------------------------------------------------
@@ -73,10 +69,14 @@ List of endpoints
 
 
      a. Installation of necessary applications like Node.js, MongoDB
-     b. Creation of ".env" file in the root and provide values for env-variables such as "PORT" for 
+     b. Dowoload the project folder attachment from the email or get it from the given github repo link
+        and open it in an sourse code editor
+     c. Creation of ".env" file in the root and provide values for env-variables such as "PORT" for 
         port number and "MONGO_URI", a MongoDB connection string.
-     c. execute command "npm i" from terminal to install necessary node modules
-     d. run the main entry file, "server.js"
+     d. execute command "npm i" from terminal to install necessary node modules
+     e. run the main entry file, "server.js"
+     f. test the several REST APIs in an API testing tool such as postman
+
 
 
  
