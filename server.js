@@ -15,7 +15,7 @@ const app = express();       // express application creation
 const port = process.env.PORT || 4000;           // port number assignment
 
 
-app.use(express.json());       // json parser middleware
+app.use(express.json());       // json parser middleware 
 
 
 // get route to ingest event data stored in the 'csv' file into the data
@@ -77,6 +77,26 @@ app.post('/events/addOne', async (req, res) => {
 });
 
 
+// // function for fetching distance
+const findDistance = async (latitude, longitude, lat2, lon2) => {
+  try {
+    const distanceResp = await axios.get('https://gg-backend-assignment.azurewebsites.net/api/Distance', {
+      params: {
+        code: 'IAKvV2EvJa6Z6dEIUqqd7yGAu7IZ8gaH-a0QO6btjRc1AzFu8Y3IcQ==',
+        latitude1: latitude,
+        longitude1: longitude,
+        latitude2: lat2,
+        longitude2: lon2
+      }
+    });
+    console.log(distanceResp.data.distance);
+    return distanceResp.data.distance;
+  } catch (error) {
+    console.log({ "weather API error": error });
+  }
+}
+
+
 // // function for fetching weather
 const findWeather = async (eventCity, eventDate) => {
   try {
@@ -84,7 +104,7 @@ const findWeather = async (eventCity, eventDate) => {
       params: {
         code: 'KfQnTWHJbg1giyB_Q9Ih3Xu3L9QOBDTuU5zwqVikZepCAzFut3rqsg==',
         city: eventCity,
-        date: eventDate
+        date: eventDate.toISOString().split("T")[0]
       }
     });
     console.log(weatherResp.data.weather);
@@ -123,20 +143,33 @@ app.get('/events/find', async (req, res) => {
       console.log('No events found for the specified criteria.');
     } else {
 
-      console.log('No of Events:', respEvents.length);
+      // console.log('No of Events:', respEvents);
 
-    // Create an array of promises for weather data
-    const weatherPromises = respEvents.map(event => findWeather(event.city, event.date));
+      // Create an array of promises for weather data
+      const weatherPromises = respEvents.map(event => findWeather(event.city, event.date));
+      console.log(weatherPromises);
 
-    // Wait for all weather promises to resolve
-    const weatherData = await Promise.all(weatherPromises);
+      // Wait for all weather promises to resolve
+      const weatherData = await Promise.all(weatherPromises);
+      console.log(`Weather data: ${weatherData}`);
 
-    // Combine events and weather data
-    const eventsWithWeather = respEvents.map((event, index) => {
-      return { ...event, weather: weatherData[index] };
-    });
 
-    res.json(eventsWithWeather);
+      // Create an array of promises for distance data
+      const distancePromises = respEvents.map(event => findDistance(latitude,longitude,event.location.latitude, event.location.longitude));
+      // console.log(distancePromises);
+
+      // Wait for all weather promises to resolve
+      const distanceData = await Promise.all(distancePromises);
+      console.log(`distance data: ${distanceData}`);
+
+
+      // Combine events and weather data
+      const eventsWithWeatherAndDistance = respEvents.map((event, index) => {
+        const eventObject = event.toObject();
+        // console.log(eventObject);
+        return { ...eventObject, weather: weatherData[index], distance: distanceData[index] };
+      });
+      res.json(eventsWithWeatherAndDistance);
     }
 
   }
